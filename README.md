@@ -48,6 +48,16 @@ python -m http.server 8080
 
 http://localhost:8080 접속.
 
+## assets 를 고칠 때
+
+`public/assets/*` 는 파일명에 내용 해시가 없다.
+고친 뒤에는 `index.html` 의 `?v=` 날짜를 올려야 방문자 브라우저가 새 파일을 받는다.
+
+```html
+<link rel="stylesheet" href="/assets/styles.css?v=20260822b">
+<script src="/assets/app.js?v=20260822b" defer></script>
+```
+
 ## 배포
 
 `main` 브랜치에 푸시하면 버셀이 자동 배포합니다.
