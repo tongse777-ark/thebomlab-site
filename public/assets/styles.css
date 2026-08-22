@@ -319,8 +319,14 @@ ul,ol,dl{margin:0; padding:0; list-style:none}
 /* footer */
 .foot{border-top:1px solid var(--line); background:var(--bg); padding:44px 0 52px}
 .foot__in{display:grid; gap:18px}
-.foot__name{font-size:16px; letter-spacing:-.02em}
+.foot__name{font-size:16px; letter-spacing:-.02em; display:flex; align-items:center;
+  gap:10px; flex-wrap:wrap}
 .foot__name b{font-weight:800}
+.foot__en{
+  font-size:12px; font-weight:700; letter-spacing:.18em;
+  color:var(--brand); background:var(--brand-soft);
+  padding:4px 10px; border-radius:6px;
+}
 .foot__meta{font-size:14.5px; color:var(--ink-3); margin-top:4px}
 .foot__links{display:flex; flex-wrap:wrap; gap:18px}
 .foot__links a{font-size:14.5px; color:var(--ink-2); text-decoration:none}
