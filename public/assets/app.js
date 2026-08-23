@@ -132,6 +132,15 @@
         if (!el.dataset.started) settle(el);
       });
     }, 1500);
+
+    /* rAF 는 탭이 비활성이면 멈춘다. 그 상태로 돌아오면 숫자가 중간값에
+       얼어붙은 것처럼 보이므로, 일정 시간 뒤에는 무조건 최종값으로 확정한다. */
+    setTimeout(function () { nums.forEach(settle); }, 5000);
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') {
+        nums.forEach(function (el) { if (el.dataset.started) settle(el); });
+      }
+    });
   } else {
     nums.forEach(startCount);
   }
