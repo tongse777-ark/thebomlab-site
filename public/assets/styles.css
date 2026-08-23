@@ -361,3 +361,108 @@ ul,ol,dl{margin:0; padding:0; list-style:none}
   *,*::before,*::after{animation-duration:.01ms !important; transition-duration:.01ms !important}
   .reveal{opacity:1; transform:none}
 }
+
+/* ============================================================
+   v2 — 사진 기반 히어로 · 인물사진 · 파트너 로고마크
+   ============================================================ */
+
+/* --- 히어로: 풀블리드 사진 + 스크림 --- */
+.hero__img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center 40%;
+}
+/* 사진 위 글자의 대비를 확보한다. 아래로 갈수록 배경색과 만나 이음매가 보이지 않게 한다. */
+.hero__scrim{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(180deg, rgba(26,22,20,.72) 0%, rgba(26,22,20,.55) 42%, rgba(26,22,20,.80) 78%, var(--bg) 100%),
+    radial-gradient(120% 80% at 50% 30%, rgba(26,22,20,.10), rgba(26,22,20,.60));
+}
+.hero{position:relative; isolation:isolate}
+.hero .hero__in{position:relative; z-index:1}
+
+/* 사진 위에 올라간 히어로 텍스트 — 토큰이 아니라 고정 흰색을 쓴다.
+   다크모드에서도 배경은 같은 사진이므로 색을 뒤집으면 안 된다. */
+.hero .eyebrow{color:#f0c9b3}
+.hero__h1{color:#fff; text-shadow:0 2px 24px rgba(0,0,0,.35)}
+.hero__h1 em{color:#f5a97f; font-style:normal}
+.hero__lead{color:rgba(255,255,255,.88)}
+.hero__lead b{color:#fff}
+.hero .btn--line{border-color:rgba(255,255,255,.5); color:#fff}
+.hero .btn--line:hover{border-color:#fff; background:rgba(255,255,255,.1)}
+.hero .stats{border-top-color:rgba(255,255,255,.18)}
+.hero .stat dt{color:rgba(255,255,255,.7)}
+.hero .stat dd{color:#fff}
+.hero .orb{opacity:.28; mix-blend-mode:screen}
+
+/* --- 헤더 로고 --- */
+.brand__logo{height:34px; width:auto; display:block}
+@media (max-width:640px){ .brand__logo{height:28px} }
+
+/* --- 프로필: 사진 + 텍스트 2단 --- */
+.profile{display:grid; gap:clamp(28px,5vw,64px); align-items:center;
+  grid-template-columns:minmax(0,.85fr) minmax(0,1fr)}
+@media (max-width:900px){ .profile{grid-template-columns:1fr} }
+
+.profile__photo{position:relative; margin:0; border-radius:var(--r); overflow:visible}
+.profile__photo img{
+  width:100%; height:auto; display:block; border-radius:var(--r);
+  box-shadow:var(--shadow-lg);
+  background:linear-gradient(160deg,#e8eef5,#d7e2ee);
+}
+/* 원형 수상 배지 — 사진 우하단에 걸치게 둔다 */
+.medal{
+  position:absolute; right:-14px; bottom:-14px;
+  width:118px; height:118px; border-radius:50%;
+  background:var(--card); box-shadow:var(--shadow-lg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:1px; text-align:center; line-height:1.25;
+}
+.medal b{font-size:19px; color:var(--brand); font-weight:800}
+.medal span{font-size:13px; font-weight:700; color:var(--ink)}
+/* 원 안에 들어가야 하므로 줄바꿈을 허용하고 폭을 제한한다 */
+.medal small{font-size:10px; color:var(--ink); opacity:.55;
+  max-width:88px; white-space:normal; word-break:keep-all; line-height:1.3}
+@media (max-width:640px){ .medal{width:96px;height:96px;right:-6px;bottom:-6px}
+  .medal b{font-size:16px} .medal span{font-size:11px} .medal small{font-size:9px} }
+
+/* --- 파트너: 텍스트를 로고마크처럼 --- */
+.logos{
+  display:grid; gap:12px;
+  grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
+}
+.logos li{
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  min-height:76px; padding:14px 12px;
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  font-weight:700; font-size:14.5px; letter-spacing:-.01em;
+  color:var(--ink); opacity:.72;
+  transition:opacity .18s, border-color .18s, transform .18s;
+}
+.logos li:hover{opacity:1; border-color:var(--brand); transform:translateY(-2px)}
+
+/* 히어로 통계 — 사진 위에 얹히므로 밝은 패널 대신 유리질로 처리한다.
+   (.stat 기본값이 background:var(--bg) 라 흰 판 위 흰 글씨가 되던 문제) */
+.hero .stats{
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.22);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.hero .stat{background:transparent}
+.hero .stat dd{color:#fff; text-shadow:0 1px 12px rgba(0,0,0,.3)}
+.hero .stat dt{color:rgba(255,255,255,.78)}
+
+/* 히어로 장식 orb 가 뷰포트를 넘어 가로 스크롤을 만들던 문제 */
+.hero__bg{overflow:hidden}
+
+/* .profile 은 사진/소개/이력 3개 자식을 가진다.
+   이력은 2단 아래 전체 폭을 쓰게 해서 사진 밑에 끼는 것을 막는다. */
+.profile__career{grid-column:1 / -1}
+@media (min-width:901px){
+  .profile{align-items:start}
+  .profile__photo{position:sticky; top:calc(var(--h) + 24px)}
+}
+
+/* 장식 요소로 인한 가로 스크롤 최종 차단 */
+html,body{overflow-x:clip}

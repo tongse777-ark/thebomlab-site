@@ -92,27 +92,47 @@
   var nums = [].slice.call(document.querySelectorAll('[data-count]'));
   function runCount(el) {
     var end = parseInt(el.dataset.count, 10);
-    if (reduce) { el.textContent = end.toLocaleString('ko-KR'); return; }
+    if (reduce) { el.textContent = end.toLocaleString('ko-KR'); el.dataset.done = '1'; return; }
     var dur = 1100, t0 = null;
     function step(ts) {
       if (t0 === null) t0 = ts;
       var p = Math.min((ts - t0) / dur, 1);
       var eased = 1 - Math.pow(1 - p, 3);
       el.textContent = Math.round(end * eased).toLocaleString('ko-KR');
-      if (p < 1) requestAnimationFrame(step);
+      if (p < 1) requestAnimationFrame(step); else el.dataset.done = '1';
     }
     requestAnimationFrame(step);
   }
+  function settle(el) {
+    /* 애니메이션 여부와 무관하게 최종 숫자를 확정한다 */
+    if (el.dataset.done) return;
+    el.dataset.done = '1';
+    el.textContent = parseInt(el.dataset.count, 10).toLocaleString('ko-KR');
+  }
+  function startCount(el) {
+    if (el.dataset.started) return;
+    el.dataset.started = '1';
+    runCount(el);
+  }
+
   if ('IntersectionObserver' in window) {
     var io2 = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (!en.isIntersecting) return;
-        runCount(en.target);
+        startCount(en.target);
         io2.unobserve(en.target);
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.25, rootMargin: '0px 0px -10% 0px' });
     nums.forEach(function (el) { io2.observe(el); });
+
+    /* 안전장치 — 관찰이 걸리지 않아도 수치가 0으로 남지 않도록 확정한다.
+       실적 숫자가 0으로 보이는 것은 애니메이션이 없는 것보다 훨씬 나쁘다. */
+    setTimeout(function () {
+      nums.forEach(function (el) {
+        if (!el.dataset.started) settle(el);
+      });
+    }, 1500);
   } else {
-    nums.forEach(runCount);
+    nums.forEach(startCount);
   }
 })();
